@@ -1,40 +1,45 @@
 import java.io.IOException;
 import java.util.Scanner;
-import static java.lang.System.out;
-public class Calculator {
-    public static void main(String[] args) {
+
+public class Main {
+    public static void main(String[] args){
         Scanner vvod = new Scanner(System.in);
         System.out.println("Введите выражение через пробел");
-        String primer = vvod.nextLine();
+
+        System.out.println("Ответ: " + calc(vvod.nextLine())); // обращаясь к методу Calc получаем итог вычисления
+    }
+    public static String calc(String input) {
+        String output; // Создадим строку для вывода результата вычисления
+
         int[] probel = new int[10];// Посчитаем колво пробелов и поставим условие не больше 2ух
         int j = 0;
 
-        for(int i = 0;i<=primer.length();i++) {
-            int ind = primer.indexOf(" ", i);
+        for(int i = 0;i<=input.length();i++) {
+            int ind = input.indexOf(" ", i);
             i = ind;
             probel[j] = ind;
-            if (ind == -1) {i = primer.length();}
+            if (ind == -1) {i = input.length();}
             j++;
         }
         if(probel[2] != -1) {
             try {
                 throw new IOException();
             } catch (IOException e) {
-                System.out.println("Введено недопустимое количество пробелов");
-                return;
+                output = "Введено недопустимое количество пробелов";
+                return output;
             }
         }
-        String stroka_a = primer.substring(0,probel[0]); //создадим строки для записи чисел и знака из сканера
-        String stroka_b = primer.substring(probel[1]+1,primer.length());
-        String znak = primer.substring(probel[0]+1,probel[1]);
+        String stroka_a = input.substring(0,probel[0]); //создадим строки для записи чисел и знака из сканера
+        String stroka_b = input.substring(probel[1]+1,input.length());
+        String znak = input.substring(probel[0]+1,probel[1]);
 
         if((znak.length() != 1) || (znak.charAt(0) != '+' && znak.charAt(0) != '-' && //ставим условия правильности знака
                 znak.charAt(0) != '/' && znak.charAt(0) != '*')) {
             try {
                 throw new IOException();
             } catch (IOException e) {
-                System.out.println("Введена некорректно операция вычисления");
-                return;
+                output = "Введена некорректно операция вычисления";
+                return output;
             }
 
         }
@@ -47,8 +52,8 @@ public class Calculator {
                 try {
                     throw new IOException();
                 } catch (IOException e) {
-                    System.out.println("Введены некорректные числа");
-                    return;
+                    output = "Введены некорректные числа";
+                    return output;
                 }
             } else if (object.indexOf(stroka_a.charAt(i-1)) > 9) rim++; // условия ввода римского числа
             else arab++; // если введено арабское
@@ -59,8 +64,8 @@ public class Calculator {
                 try {
                     throw new IOException();
                 } catch (IOException e) {
-                    System.out.println("Введены некорректно цифры");
-                    return;
+                    output = "Введены некорректно цифры";
+                    return output;
                 }
             } else if (object.indexOf(stroka_b.charAt(i-1)) > 9) rim++;
             else arab++;
@@ -69,8 +74,8 @@ public class Calculator {
             try {
                 throw new IOException();
             } catch (IOException e) {
-                System.out.println("Введены разные форматы цифр");
-                return;
+                output = "Введены разные форматы цифр";
+                return output;
             }
         }
         int itog = 0; // задали переменную итогового ответа
@@ -82,8 +87,8 @@ public class Calculator {
                 try {
                     throw new IOException();
                 } catch (IOException e) {
-                    System.out.println("Введены числа больше 10");
-                    return;
+                    output = "Введены числа больше 10";
+                    return output;
                 }
             } else {
                 switch (znak) {
@@ -100,7 +105,7 @@ public class Calculator {
                         itog = a_arab/b_arab;
                         break;
                 }
-            System.out.println(itog);
+            output = String.valueOf(itog); // Результат вычисления в случае арабских чисел
             }
         } else { // если римские числа
             int index_rim_a =-1;
@@ -130,8 +135,8 @@ public class Calculator {
                 try {
                     throw new IOException();
                 } catch (IOException e) {
-                    System.out.println("Римские числа введены некорректно");
-                    return;
+                    output = "Римские числа введены некорректно";
+                    return output;
                 }
             } else {
                 switch (znak) {
@@ -148,15 +153,18 @@ public class Calculator {
                         index_rim_itog = index_rim_a / index_rim_b;
                         break;
                 }
-                if(index_rim_itog < 0) //условие неотрицательности результата
+                if(index_rim_itog < 0) {//условие неотрицательности результата
                     try {
                         throw new IOException();
                     } catch (IOException e) {
-                        System.out.println("Получено отрицательное значение римского числа");
-                        return;
+                        output = "Получено отрицательное значение римского числа";
+                        return output;
                     }
-                System.out.println(object_rim[index_rim_itog]); //вывод ответа
+                }
+                output = object_rim[index_rim_itog]; // результат вычисления в случае римских чисел
+
             }
         }
+        return output; //возвращаемое значение метода calc в виде строки в метод Main
     }
 }
